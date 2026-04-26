@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据处理作业展示 - 个人主页</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">数据处理作业</div>
+            <ul class="nav-links">
+                <li><a href="#home">首页</a></li>
+                <li><a href="#data-intro">数据介绍</a></li>
+                <li><a href="#data-reading">数据读取</a></li>
+                <li><a href="#preprocessing">预处理</a></li>
+                <li><a href="#analysis">统计分析</a></li>
+                <li><a href="#modeling">模型建立</a></li>
+                <li><a href="#evaluation">评估可视化</a></li>
+                <li><a href="#resume">Resume</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 首页横幅 -->
+    <header id="home" class="hero">
+        <div class="hero-content">
+            <h1>心脏病数据处理作业展示</h1>
+            <p>探索临床医学公开数据库，通过数据挖掘识别心脏病风险因素</p>
+            <p style="margin-top: 10px; font-size: 1rem; opacity: 0.8;">作者：翁浩然 | 学号：2510108305</p>
+            <a href="#data-intro" class="btn">开始探索</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- 数据介绍 -->
+        <section id="data-intro" class="section">
+            <h2 class="section-title">数据介绍</h2>
+            <div class="card">
+                <p>本项目使用的数据集来自 Kaggle 平台，包含 10,000 条记录和 21 个特征。该数据集涵盖了与心脏病相关的各种健康指标和风险因素，旨在研究与心脏病相关的趋势并识别关键风险因素。</p>
+                <ul class="placeholder-list">
+                    <li><strong>数据集名称：</strong> Heart Disease Dataset (Kaggle)</li>
+                    <li><strong>样本量：</strong> 10,000 条临床记录</li>
+                    <li><strong>特征数量：</strong> 20 个预测因子 + 1 个目标变量</li>
+                    <li><strong>核心指标：</strong> 年龄、血压、胆固醇、BMI、糖尿病、吸烟习惯、睡眠时长等</li>
+                </ul>
+                <p style="color: #ef4444; font-size: 0.9rem; margin-top: 15px;">* 注：由于数据集本身特征相关性较低，模型建立过程中遇到了 AUC 接近 0.5 的挑战。</p>
+            </div>
+        </section>
+
+        <!-- 数据读取 -->
+        <section id="data-reading" class="section">
+            <h2 class="section-title">数据读取</h2>
+            <div class="card">
+                <p>使用 Python 的 Pandas 库加载 CSV 数据文件，并初步查看数据维度与结构。</p>
+                <div class="code-box">
+                    <code>
+                        import pandas as pd<br>
+                        # 读取数据集<br>
+                        df = pd.read_csv('heart_disease.csv')<br>
+                        # 查看数据维度 (10000, 21)<br>
+                        print(df.shape)<br>
+                        # 展示前五行数据<br>
+                        df.head()
+                    </code>
+                </div>
+                <p>通过 <code>df.info()</code> 发现数据集中存在少量缺失值，涉及年龄、血压、胆固醇等多个字段，需要进一步预处理。</p>
+            </div>
+        </section>
+
+        <!-- 数据预处理 -->
+        <section id="preprocessing" class="section">
+            <h2 class="section-title">数据预处理</h2>
+            <div class="card">
+                <div class="grid">
+                    <div class="grid-item">
+                        <h3>缺失值处理</h3>
+                        <p>针对数值型变量（如年龄、BMI），采用<b>中位数</b>进行填充；针对分类型变量（如性别、吸烟），采用<b>众数</b>进行填充。</p>
+                    </div>
+                    <div class="grid-item">
+                        <h3>特征工程</h3>
+                        <p>将性别、吸烟等二分类变量映射为 0/1；对锻炼习惯、压力水平等定序变量进行<b>等级编码</b>（0, 1, 2）。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 统计分析 -->
+        <section id="analysis" class="section">
+            <h2 class="section-title">统计分析</h2>
+            <div class="card">
+                <p>为了探究指标与心脏病的关系，我们将样本分为健康组与患病组，并进行了以下检验：</p>
+                <div class="stats-placeholder">
+                    <div class="stat-item">
+                        <span class="stat-num">Mann-Whitney</span>
+                        <span class="stat-label">连续变量检验</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-num">Chi-Square</span>
+                        <span class="stat-label">分类变量检验</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-num">Heatmap</span>
+                        <span class="stat-label">特征相关性分析</span>
+                    </div>
+                </div>
+                <p style="margin-top: 20px;">分析结果显示，大部分特征与心脏病状态的相关系数均小于 0.1，这解释了后续模型预测性能受限的原因。</p>
+            </div>
+        </section>
+
+        <!-- 预测模型建立 -->
+        <section id="modeling" class="section">
+            <h2 class="section-title">预测模型建立</h2>
+            <div class="card">
+                <p>本项目尝试了多种机器学习算法来构建心脏病预测模型：</p>
+                <div class="model-steps">
+                    <div class="step"><strong>逻辑回归 (Logistic Regression)：</strong> 作为基准模型进行线性分类。</div>
+                    <div class="step"><strong>随机森林 (Random Forest)：</strong> 利用集成学习处理非线性关系并评估特征重要性。</div>
+                    <div class="step"><strong>划分比例：</strong> 采用 train_test_split 将数据按 8:2 比例划分为训练集与测试集。</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 预测模型评估与可视化 -->
+        <section id="evaluation" class="section">
+            <h2 class="section-title">预测模型评估与可视化</h2>
+            <div class="card">
+                <p>通过混淆矩阵和 ROC 曲线对模型性能进行全面评估。</p>
+                <div class="grid">
+                    <div class="grid-item">
+                        <h3>评估指标</h3>
+                        <p>主要关注 AUC (Area Under Curve)、准确率 (Accuracy) 以及针对医学场景的召回率 (Recall)。</p>
+                    </div>
+                    <div class="grid-item">
+                        <h3>可视化成果</h3>
+                        <p>绘制了特征重要性排序图，直观展示各指标对预测结果的贡献度。</p>
+                    </div>
+                </div>
+                <div class="viz-placeholder">
+                    <i class="fas fa-chart-line" style="font-size: 3rem; margin-bottom: 10px; display: block;"></i>
+                    模型评估图表（ROC曲线 / 混淆矩阵）
+                </div>
+            </div>
+        </section>
+
+        <!-- Resume 模块 -->
+        <section id="resume" class="section">
+            <h2 class="section-title">Resume & 详细报告</h2>
+            <div class="card text-center">
+                <p>查看更详细的数据处理过程和完整的项目报告。</p>
+                <a href="心脏病数据处理.pdf" class="btn btn-primary" target="_blank">
+                    <i class="fas fa-file-pdf"></i> 下载/查看 心脏病数据处理.pdf
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 数据处理作业个人主页 | 设计简洁 · 现代</p>
+    </footer>
+
+    <script>
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
